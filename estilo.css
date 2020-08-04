@@ -40,6 +40,9 @@ html, body{
 .button:hover {
     background-color: rgba(22, 15, 61, 0.300);
 }
+.button:active {
+    background-color: rgba(235, 71, 30, 0.787);
+}
 
 .btn_function {
     color: #fff;

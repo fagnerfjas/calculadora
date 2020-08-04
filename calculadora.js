@@ -6,18 +6,51 @@ var numeros = [];
 var result = 0;
 
 
-function digito(val){
-    if(numero.innerHTML == "0"){
-        numero.innerHTML = "";
+/**
+ * Apaga o último caractere digitado no display da calculadora
+ */
+function backspace(){
+    if(numero.innerHTML.length > 1){
+        numero.innerHTML = numero.innerHTML.substring(0, numero.innerHTML.length-1);
+    }else{
+        numero.innerHTML = "0"
     }
-
-    numero.innerHTML += val;
 }
 
 
-function tipoOperacao(tipo){
-    if( numero.innerHTML != '0' ){
+/**
+ * Entrada de valores do teclado da calculadora
+ * @param {string} val 
+ */
+function digito(val){
+  
+    if(val == "." && numero.innerHTML == "0"){
+        numero.innerHTML = "0.";
+    }else if(val == "." && numero.innerHTML == "-"){
+        numero.innerHTML = "-0.";
+    }else if(val == "00" && numero.innerHTML == "0"){
+        numero.innerHTML = "0";
+    }else{
+        if(numero.innerHTML == "0"){
+            numero.innerHTML = "";
+        }
 
+        if(val == "." && numero.innerHTML.indexOf(".") != -1 ){
+            val = "";
+        }
+
+        numero.innerHTML += val;
+    }
+}
+
+
+function operacao(tipo){
+    if(tipo == "-" && numero.innerHTML == "0"){
+        this.digito("-");
+        return;
+    }
+
+    if(numero.innerHTML != 0){
         if(result != 0){
             numeros = [];
             operacoes = [];
@@ -25,8 +58,8 @@ function tipoOperacao(tipo){
             result = 0;  
         }
 
-        numeros.push( numero.innerHTML );
-        operacoes.push(tipo);
+        numeros.push(numero.innerHTML);
+        operacoes.push(tipo);                        
     }else if(result != 0){
         numeros = [];
         operacoes = [];
@@ -35,14 +68,20 @@ function tipoOperacao(tipo){
         operacoes.push(tipo);
         result = 0;   
     }
-    
+
     numero.innerHTML = "0";
     memoria.innerHTML = '';
     
     for(var i=0; i<numeros.length; i++ ){
         memoria.innerHTML += ' '+ numeros[i] +' '+ operacoes[i];
     }
+
+    console.log(numeros);
+    console.log(operacoes);
+    console.log(parseFloat("-.8"));
 }
+
+
 
 
 function resultado(){
