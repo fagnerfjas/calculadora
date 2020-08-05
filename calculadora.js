@@ -1,9 +1,9 @@
 
 var numero = document.getElementById('numero');
-var memoria = document.getElementById('memoria');
+var strMemoria = document.getElementById('memoria');
 var operacoes = [];
 var numeros = [];
-var result = 0;
+var result = null;
 
 
 /**
@@ -43,42 +43,32 @@ function digito(val){
     }
 }
 
-
+/**
+ * Monta a lista de dados para executar a operação em outra função 
+ * @param {String} tipo 
+ */
 function operacao(tipo){
     if(tipo == "-" && numero.innerHTML == "0"){
         this.digito("-");
         return;
     }
-
-    if(numero.innerHTML != 0){
-        if(result != 0){
-            numeros = [];
-            operacoes = [];
-            memoria.innerHTML = '';
-            result = 0;  
-        }
-
-        numeros.push(numero.innerHTML);
-        operacoes.push(tipo);                        
-    }else if(result != 0){
-        numeros = [];
-        operacoes = [];
-        memoria.innerHTML = '';
-        numeros.push( result );
-        operacoes.push(tipo);
-        result = 0;   
+    if( isNaN( parseFloat(numero.innerHTML) ) ){
+        console.log('Foi inserido o sinal de - sozinho, isso não pode!')
+        return;
     }
 
+    numeros.push( numero.innerHTML );
+    operacoes.push( tipo );
     numero.innerHTML = "0";
+
     memoria.innerHTML = '';
-    
     for(var i=0; i<numeros.length; i++ ){
         memoria.innerHTML += ' '+ numeros[i] +' '+ operacoes[i];
     }
 
     console.log(numeros);
     console.log(operacoes);
-    console.log(parseFloat("-.8"));
+    console.log(result);
 }
 
 
@@ -86,15 +76,19 @@ function operacao(tipo){
 
 function resultado(){
     
-    
     if(numero.innerHTML != '0'){
         numeros.push(numero.innerHTML);
     }
     
-    for(var i=0; i<numeros.length; i++){
-        result = this.executa( operacoes[i], numeros[i], result );
-        console.log(numeros);
-        console.log(operacoes);
+    if(result == null){
+        result = numeros[0];
+    }
+    
+    for(var i=0; i<operacoes.length; i++){
+        result = parseFloat(result) - parseFloat(numeros[i+1]);
+        console.log(numeros[i]);
+        console.log(operacoes[i]);
+        console.log(result);
     }
    
     memoria.innerHTML += ' '+ numero.innerHTML +' = <span id="resultado">' + result +'</div>';
@@ -124,9 +118,18 @@ function executa(operacao, val1, val2){
             if(val2>0){
                 return val1 / val2;
             }
-            return 0;
             break;
         default:
             return val1;
     }
+}
+
+/**
+ * Cancel Entry
+ */
+function cancelEntry(){
+    strMemoria.innerHTML = '';
+    numero.innerHTML = "0";
+    numeros = [];
+    operacoes = [];
 }
